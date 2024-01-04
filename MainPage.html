@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Add New Box Form -->
+<div class="container">
+    <h2>Add New Box</h2>
+    <form id="addBoxForm">
+      <label for="boxId">Box ID:</label>
+      <input type="text" id="boxId" name="boxId" required>
+
+      <label for="boxName">Box Name:</label>
+      <input type="text" id="boxName" name="boxName" required>
+  
+      <label for="weight">Weight:</label>
+      <input type="text" id="weight" name="weight" required>
+  
+      <label for="ownerId">Owner ID:</label>
+      <input type="text" id="ownerId" name="ownerId" required>
+  
+      <button type="button" onclick="addBox()">Submit</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h2>Add New Customer</h2>
+    <form id="addCustomerForm">
+      <label for="customerId">Customer ID:</label>
+      <input type="text" id="customerId" name="customerId" required>
+
+      <label for="customerName">Customer Name:</label>
+      <input type="text" id="customerName" name="customerName" required>
+  
+      <button type="button" onclick="addCustomer()">Submit</button>
+    </form>
+  </div>
+
+  <!-- Update Box Data Form -->
+<div class="container">
+    <h2>Update Box Data</h2>
+    <form id="updateBoxForm">
+      <label for="updateBoxId">Box ID:</label>
+      <input type="text" id="updatedBoxId" name="updateBoxId" required>
+  
+      <label for="boxName">Box Name:</label>
+      <input type="text" id="updatedBoxName" name="boxName" required>
+
+      <label for="updateWeight">Weight:</label>
+      <input type="text" id="updatedWeight" name="updateWeight" required>
+  
+      <button type="button" onclick="updateBox()">Submit</button>
+    </form>
+  </div>
+
+
+  <!-- Transfer Box Form -->
+<div class="container">
+    <h2>Transfer Box to Another Owner</h2>
+    <form id="transferBoxForm">
+      <label for="transferBoxId">Box ID:</label>
+      <input type="text" id="transferBoxId" name="transferBoxId" required>
+  
+      <label for="transferWeight">Weight:</label>
+      <input type="text" id="transferWeight" name="transferWeight" required>
+  
+      <label for="newOwnerId">New Owner ID:</label>
+      <input type="text" id="newOwnerId" name="newOwnerId" required>
+
+      <label for="commentVal">Comment:</label>
+      <input type="text" id="commentVal" name="commentVal" required>
+  
+      <button type="button" onclick="transferBox()">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function addBox() {
+      console.log("Adding new box...");
+    const boxId = document.getElementById('boxId').value;
+    const boxName = document.getElementById('boxName').value;
+    const weight = document.getElementById('weight').value;
+    const ownerId = document.getElementById('ownerId').value;
+
+    const data = {
+        id: boxId,
+        boxName: boxName,
+        boxWeight: weight,
+        customerId: ownerId,
+    };
+
+    // Make a POST request using the fetch API
+    fetch('http://localhost:8081/trade/addNewBox', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Assuming the API returns JSON data
+    })
+    .then(data => {
+      console.log('API response:', data);
+      alert('Box added sucessfully');
+      // Handle the API response here
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle errors here
+    });
+
+    }
+
+    function addCustomer() {
+      console.log("Adding new customer...");
+    const customerId = document.getElementById('customerId').value;
+    const customerName = document.getElementById('customerName').value;
+
+    const data = {
+      customerId: customerId,
+      customerName: customerName
+    };
+
+    // Make a POST request using the fetch API
+    fetch('http://localhost:8081/trade/addNewCustomer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Assuming the API returns JSON data
+    })
+    .then(data => {
+      console.log('API response:', data);
+      alert('Customer added sucessfully');
+      // Handle the API response here
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle errors here
+    });
+
+    }
+  
+    function updateBox() {
+      
+      console.log("Updating box data...");
+
+    const boxId = document.getElementById('updatedBoxId').value;
+    const boxName = document.getElementById('updatedBoxName').value;
+    const weight = document.getElementById('updatedWeight').value;
+
+    const data = {
+        id: boxId,
+        boxName: boxName,
+        boxWeight: weight
+    };
+
+    // Convert the formData object into a URL-encoded string
+    // const encodedData = new URLSearchParams(formatData).toString();
+
+    // Make a POST request using the fetch API
+    fetch('http://localhost:8081/trade/updateBoxDetails', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Assuming the API returns JSON data
+    })
+    .then(data => {
+      console.log('API response:', data);
+      alert('Box updated sucessfully');
+      // Handle the API response here
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle errors here
+    });
+    }
+  
+    function transferBox() {
+      
+      console.log("Transferring box...");
+      const boxId = document.getElementById('transferBoxId').value;
+    const weight = document.getElementById('transferWeight').value;
+    const ownerId = document.getElementById('newOwnerId').value;
+    const comment = document.getElementById('commentVal').value;
+
+    const data = {
+        boxId: boxId,
+        transferredQuantity: weight,
+        comment:comment,
+        toCustomerId: ownerId,
+    };
+
+    // Convert the formData object into a URL-encoded string
+    // const encodedData = new URLSearchParams(formatData).toString();
+
+    // Make a POST request using the fetch API
+    fetch('http://localhost:8081/trade/transferAsset', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response; // Assuming the API returns JSON data
+    })
+    .then(data => {
+      console.log('API response:', data);
+      alert('Asset Transfer sucessful');
+      // Handle the API response here
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle errors here
+    });
+    }
+  </script>
+  
+</body>
+
+</html>
